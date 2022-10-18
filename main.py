@@ -3,7 +3,7 @@ from get_chrome_driver import GetChromeDriver
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 
-INTERVAL = 60.0
+INTERVAL = 3.0
 NUMBER = 0
 
 def get_driver():
@@ -91,24 +91,21 @@ def wait_disconnect(driver: webdriver.Chrome):
     max_users = get_count_users(driver)
     while is_working:
         set_timeout(INTERVAL)
-        is_working = not is_session_stopped(driver) or int(max_users) / 100 * 90 >= int(get_count_users(driver))
+        is_working = not is_session_stopped(driver)# or int(max_users) / 100 * 90 >= int(get_count_users(driver))
 
 
-def turn_off_microphone(driver: webdriver.Chrome):
-    button_element = driver.find_element(by=By.XPATH, value="//*[@id='foot-bar']/div[1]/div[1]/button")
-    button_element.click()
-
-
-def start(meet_code, pass_code, user_name, driver):
+def start(meet_code, pass_code, user_name):
+    print("Start")
+    driver = get_driver()
     print("Join to session.")
     join_to_session(meet_code, pass_code, user_name, driver)
     print("Wait connection.")
     wait_connection(driver)
     print("Wait disconnect.")
-    turn_off_microphone(driver)
-    print("Microphone turned off")
     wait_disconnect(driver)
     print("Stop session")
+    driver.quit()
+    print("End")
 
 
 def main():
@@ -116,9 +113,8 @@ def main():
     pass_code = "9XBXZM"
     user_name = "User 1"
 
-    driver = get_driver()
-    start(meet_code, pass_code, user_name, driver)
-    start(meet_code, pass_code, user_name, driver)
+    start(meet_code, pass_code, user_name)
+    start(meet_code, pass_code, user_name)
 
 
 if __name__ == '__main__':
