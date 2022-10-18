@@ -65,6 +65,7 @@ def is_session_stopped(driver: webdriver.Chrome):
 def set_timeout(interval):
     start_time = time.time()
     if time.time() - start_time > interval:
+        start_time = time.time()
         return
 
 
@@ -105,6 +106,8 @@ def start(meet_code, pass_code, user_name, driver):
     print("Wait connection.")
     wait_connection(driver)
     print("Wait disconnect.")
+    turn_off_microphone(driver)
+    print("Microphone turned off")
     wait_disconnect(driver)
     print("Stop session")
 
