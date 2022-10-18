@@ -64,9 +64,8 @@ def is_session_stopped(driver: webdriver.Chrome):
 
 def set_timeout(interval):
     start_time = time.time()
-    if time.time() - start_time > interval:
-        start_time = time.time()
-        return
+    while time.time() - start_time < interval:
+        pass
 
 
 def wait_connection(driver: webdriver.Chrome):
