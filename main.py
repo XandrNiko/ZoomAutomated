@@ -99,6 +99,8 @@ def wait_disconnect(driver: webdriver.Chrome):
 
 
 def algo_leave(moment_users):
+    global step
+    global USERS_ARRAY
     step += 1
     border = -10
     if step > (900 / INTERVAL):   # 15 min
