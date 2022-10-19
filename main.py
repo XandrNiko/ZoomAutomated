@@ -3,8 +3,12 @@ from get_chrome_driver import GetChromeDriver
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 
+import numpy as np
+
 INTERVAL = 3.0
 NUMBER = 0
+USERS_ARRAY = np.array([])
+step = 0
 
 def get_driver():
     chrome_options = webdriver.ChromeOptions()
@@ -91,8 +95,21 @@ def wait_disconnect(driver: webdriver.Chrome):
     max_users = get_count_users(driver)
     while is_working:
         set_timeout(INTERVAL)
-        is_working = not is_session_stopped(driver)# or int(max_users) / 100 * 90 >= int(get_count_users(driver))
+        is_working = not is_session_stopped(driver) or algo_leave(int(get_count_users(driver)))
 
+
+def algo_leave(moment_users):
+    step += 1
+    border = -10
+    if step > (900 / INTERVAL):   # 15 min
+        if np.mean(USERS_ARRAY) - moment_users > border:
+            USERS_ARRAY = np.append(moment_users)
+            return False
+        else:
+            return True
+    else:    
+        USERS_ARRAY = np.append(moment_users)
+        return False
 
 def start(meet_code, pass_code, user_name):
     print("Start")
